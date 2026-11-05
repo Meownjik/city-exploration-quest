@@ -1,0 +1,4 @@
+# Plaintext quest sources (answers) stay local. Pages deploys the repo, so they must not be committed.
+# The placeholder stays tracked as an example.
+data/quests/*.source.json
+!data/quests/placeholder-quest.source.json

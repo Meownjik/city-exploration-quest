@@ -26,6 +26,12 @@ src.stations[0].names = ['Місце'];
 const back = Q.data.unpackAll(Q.data.pack(src));
 assert.deepStrictEqual(back.stations[0].names, ['Місце']);
 
+// quest ids (used in ?questId= and in data/quests/<id>.js)
+for (const ok of ['placeholder-quest', 'Quest_01', 'a', 'ABC-xyz_9']) assert(Q.data.isValidQuestId(ok), ok);
+for (const bad of ['', '../x', '..', 'a/b', 'a\\b', 'a.b', 'a b', 'a%2Fb', 'a?b', 'a#b', 'a\n', 'кварт', null, undefined, 1]) {
+  assert(!Q.data.isValidQuestId(bad), 'should reject ' + JSON.stringify(bad));
+}
+
 // crossword
 const words = ['МАЙДАННЕЗАЛЕЖНОСТІ', 'ЗОЛОТІВОРОТА', 'КИЄВОПЕЧЕРСЬКАЛАВРА'].map((l, i) => ({ id: i, letters: l }));
 const lay = Q.crossword.generate(words, 'seed');

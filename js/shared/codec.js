@@ -33,6 +33,14 @@
     return JSON.parse(new TextDecoder().decode(xor(fromB64(str), key)));
   }
 
+  // ---------- quest ids ----------
+  // Used in the ?questId= URL parameter, the data file name and the progress key.
+  // Strictly limited so it can never contain path separators or dots (no path traversal).
+  var QUEST_ID_RE = /^[A-Za-z0-9_-]+$/;
+  function isValidQuestId(id) {
+    return typeof id === 'string' && QUEST_ID_RE.test(id);
+  }
+
   // ---------- data model ----------
   var DEFAULT_SETTINGS = {
     scoring: {
@@ -127,7 +135,8 @@
     unpackAnswer: unpackAnswer,
     unpackAll: unpackAll,
     mergeSettings: mergeSettings,
-    emptyStation: emptyStation
+    emptyStation: emptyStation,
+    isValidQuestId: isValidQuestId
   };
   Q.text = { normalize: normalize, letters: letters };
 

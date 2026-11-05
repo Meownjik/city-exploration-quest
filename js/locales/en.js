@@ -2,7 +2,10 @@
   var Q = (root.Quest = root.Quest || {});
   Q.locales = Q.locales || {};
   Q.locales.en = {
-    'app.loadError': 'Could not load quest data (data/quest.js).',
+    'app.loadError': 'Could not load quest data.',
+    'app.noQuest': 'No quest selected. Open the link with a questId, e.g. ?questId=my-quest.',
+    'app.badQuest': 'Invalid questId. Use only Latin letters, digits, "-" and "_".',
+    'app.questNotFound': 'Quest "{id}" was not found.',
     'app.storageWarn': 'Browser storage is unavailable: progress will be lost when the page is closed.',
     'app.unexpected': 'An unexpected error occurred, but you can keep playing.',
     'start.choose': 'Choose game mode',

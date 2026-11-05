@@ -3,7 +3,7 @@
   var Q = window.Quest;
   var t = Q.i18n.t, loc = Q.i18n.loc;
   var ACCEPTED = 'task.accepted';
-  var packed = window.QUEST_DATA;
+  var packed = null; // set once the quest from ?questId= is loaded
   var app = document.getElementById('app');
   var toastEl = document.getElementById('toast');
   var titleEl = document.getElementById('title');
@@ -307,12 +307,30 @@
     if (packed) render();
   });
 
-  if (!packed || !Array.isArray(packed.stations) || !packed.stations.length) {
-    app.appendChild(h('div', { class: 'notice error', text: t('app.loadError') }));
-  } else {
+  function showError(text) {
+    app.innerHTML = '';
+    app.appendChild(h('div', { class: 'notice error', text: text }));
+  }
+  function start(quest) {
+    if (!quest || !Array.isArray(quest.stations) || !quest.stations.length) {
+      showError(t('app.loadError'));
+      return;
+    }
+    packed = quest;
     STORE = 'cityquest:state:' + packed.id;
     state = loadState();
     if (state && state.idx > n()) state = null;
     render();
+  }
+
+  var questId = Q.loader.questIdFromUrl();
+  if (!questId) {
+    showError(t('app.noQuest'));
+  } else if (!Q.data.isValidQuestId(questId)) {
+    showError(t('app.badQuest'));
+  } else {
+    Q.loader.loadQuest(questId).then(start, function () {
+      showError(t('app.questNotFound', { id: questId }));
+    });
   }
 })();

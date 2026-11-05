@@ -2,6 +2,7 @@
   'use strict';
   var Q = window.Quest;
   var t = Q.i18n.t, loc = Q.i18n.loc;
+  var ACCEPTED = 'task.accepted';
   var packed = window.QUEST_DATA;
   var app = document.getElementById('app');
   var toastEl = document.getElementById('toast');
@@ -22,7 +23,7 @@
       if (v == null) return;
       if (k === 'class') e.className = v;
       else if (k === 'text') e.textContent = v;
-      else if (k.indexOf('on') === 0) e[k] = v;
+      else if (k.startsWith('on')) e[k] = v;
       else if (k === 'value') e.value = v;
       else e.setAttribute(k, v);
     });
@@ -44,7 +45,7 @@
   function questTitle() { return loc(packed.title) || 'Quest'; }
   function n() { return packed.stations.length; }
   function settings() { return Q.data.mergeSettings(packed.settings); }
-  function scrollTop() { try { window.scrollTo(0, 0); } catch (e) {} }
+  function scrollTop() { try { window.scrollTo(0, 0); } catch { /* ignore */ } }
 
   // ---------- state ----------
   function newState(mode) {
@@ -53,7 +54,7 @@
   }
   function loadState() {
     var s = Q.storage.load(STORE);
-    if (!s || s.v !== 1 || !s.mode || !Array.isArray(s.results)) return null;
+    if (s?.v !== 1 || !s.mode || !Array.isArray(s.results)) return null;
     return s;
   }
   function reset() {
@@ -165,10 +166,10 @@
     if (nt.locIssue) {
       box.appendChild(h('button', { class: 'btn', type: 'button', text: t('loc.retry'), onclick: checkIn }));
       box.appendChild(h('button', { class: 'btn', type: 'button', text: t('loc.proceed'), onclick: function () {
-        advance('solved', true, t('task.accepted'));
+        advance('solved', true, t(ACCEPTED));
       } }));
       box.appendChild(h('button', { class: 'btn', type: 'button', text: t('loc.standalone'), onclick: function () {
-        state.mode = 'standalone'; ui.notice = null; save(); advance('solved', false, t('task.accepted'));
+        state.mode = 'standalone'; ui.notice = null; save(); advance('solved', false, t(ACCEPTED));
       } }));
     }
     return box;
@@ -184,7 +185,7 @@
       render(); focusName(); return;
     }
     if (state.mode === 'standalone' || ans.lat == null || ans.lng == null) {
-      advance('solved', false, t('task.accepted')); return;
+      advance('solved', false, t(ACCEPTED)); return;
     }
     ui.busy = true; ui.notice = null; render();
     var idxAtStart = state.idx;
@@ -198,7 +199,7 @@
       var d = Q.geo.distance(pos.lat, pos.lng, ans.lat, ans.lng);
       var effective = Math.max(0, d - Math.min(pos.accuracy || 0, 100));
       if (effective <= (ans.radius || 75)) {
-        advance('solved', false, t('task.accepted'));
+        advance('solved', false, t(ACCEPTED));
       } else {
         ui.notice = { kind: 'error', text: t('task.tooFar', { d: Math.round(d), r: ans.radius || 75 }) };
         render();
@@ -288,7 +289,7 @@
     app.appendChild(h('button', { class: 'btn', type: 'button', text: t('res.copy'), onclick: function () {
       try {
         navigator.clipboard.writeText(summary).then(function () { toast(t('res.copied')); }, function () { window.prompt('', summary); });
-      } catch (e) { window.prompt('', summary); }
+      } catch { window.prompt('', summary); }
     } }));
   }
 

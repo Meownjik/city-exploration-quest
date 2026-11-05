@@ -8,31 +8,31 @@
     var k = '__cq_test__';
     root.localStorage.setItem(k, '1');
     root.localStorage.removeItem(k);
-  } catch (e) {
+  } catch {
     persistent = false;
   }
   function getRaw(key) {
     if (persistent) {
-      try { return root.localStorage.getItem(key); } catch (e) { persistent = false; }
+      try { return root.localStorage.getItem(key); } catch { persistent = false; }
     }
     return Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null;
   }
   function setRaw(key, val) {
     mem[key] = val;
     if (persistent) {
-      try { root.localStorage.setItem(key, val); } catch (e) { persistent = false; }
+      try { root.localStorage.setItem(key, val); } catch { persistent = false; }
     }
   }
   function remove(key) {
     delete mem[key];
     if (persistent) {
-      try { root.localStorage.removeItem(key); } catch (e) { persistent = false; }
+      try { root.localStorage.removeItem(key); } catch { persistent = false; }
     }
   }
   function load(key) {
     var raw = getRaw(key);
     if (!raw) return null;
-    try { return JSON.parse(raw); } catch (e) { return null; }
+    try { return JSON.parse(raw); } catch { return null; }
   }
   function save(key, obj) { setRaw(key, JSON.stringify(obj)); }
 

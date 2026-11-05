@@ -1,4 +1,5 @@
 /* Crossword generator + touch-friendly renderer. */
+/* global module */
 (function (root) {
   'use strict';
   var Q = (root.Quest = root.Quest || {});
@@ -183,7 +184,7 @@
         if (!both) dir = c.dirs.a ? 'a' : 'd';
         else if (was) dir = dir === 'a' ? 'd' : 'a';
         updateDirBtn(); highlight();
-        try { inp.select(); } catch (e) {}
+        try { inp.select(); } catch { /* ignore */ }
       });
       inp.addEventListener('click', function () {
         if (cur === c && c.dirs.a && c.dirs.d && document.activeElement === inp && c._clicked) {

@@ -4,7 +4,7 @@
   var Q = (root.Quest = root.Quest || {});
 
   function supported() {
-    try { return !!(root.navigator && root.navigator.geolocation); } catch (e) { return false; }
+    try { return !!(root.navigator && root.navigator.geolocation); } catch { return false; }
   }
 
   // Resolves { ok:true, lat, lng, accuracy } or { ok:false, reason }
@@ -33,7 +33,7 @@
           },
           { enableHighAccuracy: true, timeout: timeout, maximumAge: 5000 }
         );
-      } catch (e) {
+      } catch {
         finish({ ok: false, reason: 'error' });
       }
     });

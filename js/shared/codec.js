@@ -1,3 +1,4 @@
+/* global module */
 /* Shared codec: obfuscation (UTF-8 -> XOR -> base64), data pack/unpack, text normalization.
    Works in browsers (classic script, file:// safe) and in Node (require). */
 (function (root) {

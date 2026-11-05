@@ -1,3 +1,4 @@
+/* global module */
 (function (root) {
   'use strict';
   var Q = (root.Quest = root.Quest || {});

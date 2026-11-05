@@ -4,6 +4,7 @@
   var root = document.getElementById('editor');
   var statusEl = document.getElementById('status');
   var DRAFT = 'cityquest:editor:draft';
+  var TEXT_PLAIN = 'text/plain';
 
   var model, sel = 0;
   var listEl, formEl, issuesEl;
@@ -15,7 +16,7 @@
   }
   function fromData() {
     try {
-      if (window.QUEST_DATA && window.QUEST_DATA.stations) return Q.data.unpackAll(window.QUEST_DATA);
+      if (window.QUEST_DATA?.stations) return Q.data.unpackAll(window.QUEST_DATA);
     } catch (e) { alert('Could not decode data/quest.js: ' + e.message); }
     return defaultModel();
   }
@@ -25,10 +26,10 @@
     m.stations = (m.stations || []).map(function (s) {
       var d = Q.data.emptyStation();
       s = Object.assign(d, s);
-      s.prompt = Object.assign({ uk: '', en: '' }, s.prompt);
-      s.clue = Object.assign({ uk: '', en: '' }, s.clue);
-      s.hints = (s.hints && s.hints.length ? s.hints : d.hints).map(function (h) { return Object.assign({ uk: '', en: '' }, h); });
-      s.names = s.names && s.names.length ? s.names : [''];
+      s.prompt = {uk: '', en: '', ...s.prompt};
+      s.clue = {uk: '', en: '', ...s.clue};
+      s.hints = (s.hints?.length ? s.hints : d.hints).map(function (h) { return Object.assign({ uk: '', en: '' }, h); });
+      s.names = s.names?.length ? s.names : [''];
       return s;
     });
     if (!m.stations.length) m.stations.push(Q.data.emptyStation());
@@ -53,9 +54,9 @@
     if (s.hints.length < 2 || s.hints.length > 3) e.push(p + 'needs 2-3 hints');
     s.hints.forEach(function (h, k) { if (!h.uk.trim()) e.push(p + 'hint ' + (k + 1) + ' (uk) is empty'); });
     if (!s.names.some(function (n) { return n.trim(); })) e.push(p + 'location name is empty');
-    if (typeof s.lat !== 'number' || isNaN(s.lat) || s.lat < -90 || s.lat > 90) e.push(p + 'latitude invalid');
-    if (typeof s.lng !== 'number' || isNaN(s.lng) || s.lng < -180 || s.lng > 180) e.push(p + 'longitude invalid');
-    if (!(s.radius >= 10)) e.push(p + 'radius must be at least 10 m');
+    if (typeof s.lat !== 'number' || Number.isNaN(s.lat) || s.lat < -90 || s.lat > 90) e.push(p + 'latitude invalid');
+    if (typeof s.lng !== 'number' || Number.isNaN(s.lng) || s.lng < -180 || s.lng > 180) e.push(p + 'longitude invalid');
+    if (typeof s.radius !== 'number' || Number.isNaN(s.radius) || s.radius < 10) e.push(p + 'radius must be at least 10 m');
     return e;
   }
   function validate() {
@@ -111,13 +112,13 @@
     var i = el('input', 'input'); i.type = 'text'; i.inputMode = 'decimal';
     i.value = obj[prop] == null ? '' : obj[prop];
     i.addEventListener('input', function () {
-      var v = parseFloat(i.value.replace(',', '.'));
-      obj[prop] = isNaN(v) ? (nullable ? null : 0) : v; changed();
+      var v = Number.parseFloat(i.value.replace(',', '.'));
+      obj[prop] = Number.isNaN(v) ? (nullable ? null : 0) : v; changed();
     });
     return i;
   }
   function download(name, text, type) {
-    var blob = new Blob([text], { type: type || 'text/plain' });
+    var blob = new Blob([text], { type: type || TEXT_PLAIN });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = name;
     document.body.appendChild(a); a.click();
@@ -126,7 +127,7 @@
 
   // ---------- export / import ----------
   function cleanModel() {
-    var c = JSON.parse(JSON.stringify(model));
+    var c = structuredClone(model);
     c.id = c.id.trim();
     c.stations.forEach(function (s) {
       s.names = s.names.map(function (n) { return n.trim(); }).filter(Boolean);
@@ -176,7 +177,7 @@
       row.appendChild(btn('\u2193', 'mini', function (e) { e.stopPropagation(); move(i, i + 1); }));
       row.appendChild(btn('\u29C9', 'mini', function (e) {
         e.stopPropagation();
-        model.stations.splice(i + 1, 0, JSON.parse(JSON.stringify(s))); sel = i + 1; changed(); renderForm();
+        model.stations.splice(i + 1, 0, structuredClone(s)); sel = i + 1; changed(); renderForm();
       }));
       row.appendChild(btn('\u2715', 'mini', function (e) {
         e.stopPropagation();
@@ -186,12 +187,12 @@
         sel = Math.min(sel, model.stations.length - 1); changed(); renderForm();
       }));
       row.onclick = function () { sel = i; renderList(); renderForm(); };
-      row.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', String(i)); });
+      row.addEventListener('dragstart', function (e) { e.dataTransfer.setData(TEXT_PLAIN, String(i)); });
       row.addEventListener('dragover', function (e) { e.preventDefault(); row.classList.add('over'); });
       row.addEventListener('dragleave', function () { row.classList.remove('over'); });
       row.addEventListener('drop', function (e) {
         e.preventDefault();
-        move(parseInt(e.dataTransfer.getData('text/plain'), 10), i);
+        move(Number.parseInt(e.dataTransfer.getData(TEXT_PLAIN), 10), i);
       });
       listEl.appendChild(row);
     });
@@ -251,7 +252,7 @@
     paste.addEventListener('input', function () {
       var m = paste.value.match(/(-?\d+(?:[.,]\d+)?)[\s,;]+(-?\d+(?:[.,]\d+)?)/);
       if (m) {
-        s.lat = parseFloat(m[1].replace(',', '.')); s.lng = parseFloat(m[2].replace(',', '.'));
+        s.lat = Number.parseFloat(m[1].replace(',', '.')); s.lng = parseFloat(m[2].replace(',', '.'));
         latI.value = s.lat; lngI.value = s.lng; changed();
       }
     });

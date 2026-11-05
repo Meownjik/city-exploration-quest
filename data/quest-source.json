@@ -1,0 +1,117 @@
+{
+  "id": "placeholder-quest",
+  "title": {
+    "uk": "Квест містом (демо)",
+    "en": "City quest (demo)"
+  },
+  "settings": {
+    "scoring": {
+      "perSolved": 100,
+      "perHint": 10,
+      "perSkip": 0,
+      "perUnverified": 20,
+      "timeBonusMax": 0,
+      "timeParMinutes": 0,
+      "perCrosswordWord": 20
+    },
+    "crossword": {
+      "enabled": true,
+      "includeSkipped": false
+    }
+  },
+  "stations": [
+    {
+      "prompt": {
+        "uk": "ЗАГЛУШКА: текст завдання №1. Відгадайте місце.",
+        "en": "PLACEHOLDER: puzzle text #1. Guess the place."
+      },
+      "hints": [
+        {
+          "uk": "Заглушка: підказка 1 до завдання 1",
+          "en": "Placeholder: hint 1 for task 1"
+        },
+        {
+          "uk": "Заглушка: підказка 2 до завдання 1",
+          "en": "Placeholder: hint 2 for task 1"
+        },
+        {
+          "uk": "Заглушка: підказка 3 до завдання 1",
+          "en": "Placeholder: hint 3 for task 1"
+        }
+      ],
+      "names": [
+        "Майдан Незалежності",
+        "Maidan Nezalezhnosti"
+      ],
+      "lat": 50.4501,
+      "lng": 30.5234,
+      "radius": 100,
+      "clue": {
+        "uk": "Заглушка: підказка до кросворду 1",
+        "en": "Placeholder: crossword clue 1"
+      }
+    },
+    {
+      "prompt": {
+        "uk": "ЗАГЛУШКА: текст завдання №2. Відгадайте місце.",
+        "en": "PLACEHOLDER: puzzle text #2. Guess the place."
+      },
+      "hints": [
+        {
+          "uk": "Заглушка: підказка 1 до завдання 2",
+          "en": "Placeholder: hint 1 for task 2"
+        },
+        {
+          "uk": "Заглушка: підказка 2 до завдання 2",
+          "en": "Placeholder: hint 2 for task 2"
+        },
+        {
+          "uk": "Заглушка: підказка 3 до завдання 2",
+          "en": "Placeholder: hint 3 for task 2"
+        }
+      ],
+      "names": [
+        "Золоті ворота",
+        "Golden Gate"
+      ],
+      "lat": 50.4486,
+      "lng": 30.5139,
+      "radius": 100,
+      "clue": {
+        "uk": "Заглушка: підказка до кросворду 2",
+        "en": "Placeholder: crossword clue 2"
+      }
+    },
+    {
+      "prompt": {
+        "uk": "ЗАГЛУШКА: текст завдання №3. Відгадайте місце.",
+        "en": "PLACEHOLDER: puzzle text #3. Guess the place."
+      },
+      "hints": [
+        {
+          "uk": "Заглушка: підказка 1 до завдання 3",
+          "en": "Placeholder: hint 1 for task 3"
+        },
+        {
+          "uk": "Заглушка: підказка 2 до завдання 3",
+          "en": "Placeholder: hint 2 for task 3"
+        },
+        {
+          "uk": "Заглушка: підказка 3 до завдання 3",
+          "en": "Placeholder: hint 3 for task 3"
+        }
+      ],
+      "names": [
+        "Києво-Печерська лавра",
+        "Kyiv Pechersk Lavra"
+      ],
+      "lat": 50.4346,
+      "lng": 30.5572,
+      "radius": 100,
+      "clue": {
+        "uk": "Заглушка: підказка до кросворду 3",
+        "en": "Placeholder: crossword clue 3"
+      }
+    }
+  ]
+}
